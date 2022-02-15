@@ -11,8 +11,7 @@ int gen_random(int &seed, int number)
     return rand() % number;
 }
 
-template <std::size_t n>
-void print_matrix(int arr[n][n])
+void print_matrix(int n, int** arr)
 {
     using namespace std;
     for (int i = 0; i < n; i++)
@@ -39,7 +38,10 @@ int main()
     cin >> cryst_amount;
     cout << endl;
 
-    int grid[size][size];
+    int** grid = new int*[size];
+    for (int i = 0; i < size; i++)
+        grid[i] = new int[size];
+
     int init_cryst_i[cryst_amount];
     int init_cryst_j[cryst_amount];
 
@@ -69,14 +71,8 @@ int main()
     }
 
     //---------print-----------
-    for (int i = 0; i < size; i++)
-    {
-        for (int j = 0; j < size; j++)
-        {
-            cout << grid[i][j] << " ";
-        }
-        cout << endl;
-    }
+    
+    print_matrix(size, grid);
 
     return 0;
 }
