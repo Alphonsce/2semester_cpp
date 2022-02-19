@@ -41,7 +41,7 @@ void print_2D_vector(const std::vector<std::vector<int>>& vec)
 
 bool find_vector_in_2D_vector(const std::vector<int>& v, const std::vector<std::vector<int>>& vec)
 {
-    for (auto u: vec)
+    for (std::vector<int> u: vec)
     {
         if (u == v)
         {
@@ -51,10 +51,42 @@ bool find_vector_in_2D_vector(const std::vector<int>& v, const std::vector<std::
     return false;
 }
 
+bool is_already_stopped(int size, char** grid, int i, int j) {
+    if (grid[i][j] == '*')
+    {
+        if ( (i == 0) || (i == size - 1) || (j == 0) || (j == size - 1) )
+        {
+            return true;
+        }
+        else if ( (grid[i + 1][j] == '*') || (grid[i - 1][j] == '*') || (grid[i][j + 1] == '*') || (grid[i][j - 1] == '*') )
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::vector<std::vector<int>> calculate_all_stops(int size, char** grid) {
+    std::vector<std::vector<int>> all_stops;
+    for (int i = 0; i < size; i++)
+    {
+        for (int j = 0; j < size; j++)
+        {
+            if (is_already_stopped(size, grid, i, j)) {
+                all_stops.push_back({i, j});
+            }
+        }
+    }
+    return all_stops;
+}
+
 int main()
 {
     using namespace std;
-    int size, cryst_amount, steps = 0, seed = 105;
+    int size;
+    int cryst_amount;
+    int steps = 0;
+    int seed = 105;
     bool one_marker = false;
     // cryst_amount is a total number of crystalls
 
@@ -127,91 +159,61 @@ int main()
     cout << "------------------" << endl;
 
     // starting the movement of the crystalls here
-    vector<vector<int> > all_stops;
-
+    vector<vector<int>> all_stops = calculate_all_stops(size, grid);
     while (all_stops.size() < actual_amount)
     {
         // defining positions, which we don't need to move
-        all_stops.clear();
-        for (int i = 0; i < size; i++)
-        {
-            for (int j = 0; j < size; j++)
-            {
-
-                if ( (i == 0) || (i == size - 1) || (j == 0) || (j == size - 1) )
-                {
-                    if (grid[i][j] == '*')
-                    {
-                        all_stops.push_back({i, j});
-                    }
-                }
-                // else if ( (j == 0) || (j == size - 1) )
-                // {
-                //     if (grid[i][j] == '*')
-                //     {
-                //         all_stops.push_back({i, j});
-                //     }
-                // }
-                else if ( (grid[i + 1][j] == '*') || (grid[i - 1][j] == '*') || (grid[i][j + 1] == '*') || (grid[i][j - 1] == '*') )
-                {
-                    if (grid[i][j] == '*')
-                    {
-                        all_stops.push_back({i, j});
-                    }
-                }
-            }
-        }    
-
         // move all the crystalls at the same time
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
             {
                 vector<int> cur_pos = {i, j};
-                if (find_vector_in_2D_vector(cur_pos, all_stops))
-                {
+                if (grid[i][j] == '0' || find_vector_in_2D_vector(cur_pos, all_stops))
                     continue;
-                }
-                else if (grid[i][j] == '*' && (i != 0) && (i != size - 1) && (j != 0) && (j != size - 1) )
+                else
                 {
+                    grid[i][j] = '0';
                     int r = gen_random(4);
+                    int new_i, new_j;
                     if (r == 0)
                     {
-                        grid[i][j] = '0';
-                        grid[i + 1][j] = '*';
+                        new_i = i + 1;
+                        new_j = j;
                     }
                     else if (r == 1)
                     {
-                        grid[i][j] = '0';
-                        grid[i - 1][j] = '*';
+                        new_i = i - 1;
+                        new_j = j;
                     }
                     else if (r == 2)
                     {
-                        grid[i][j] = '0';
-                        grid[i][j + 1] = '*';
+                        new_i = i;
+                        new_j = j + 1;
+                        j += 1;
                     }
                     else
                     {
-                        grid[i][j] = '0';
-                        grid[i][j - 1] = '*';
+                        new_i = i;
+                        new_j = j - 1;
+                    }
+                    grid[new_i][new_j] = '*';
+
+                    if (is_already_stopped(size, grid, new_i, new_j)) {
+                        all_stops.push_back({new_i, new_j});
+                        if ((j != size - 1) && grid[new_i][new_i + 1] == '*')
+                            all_stops.push_back({new_i, new_j + 1});
                     }
                 }
             }
         }
         steps += 1;
-        // if (steps == 500){break;}
-        //----------print------------
-        //print_matrix(size, grid);
-        // print_2D_vector(all_stops);
-        //cout << all_stops.size() << ' ' << cryst_amount << endl;
-        // break;
-        // cout << "---------------------" << endl;
-    }    
+    }
 
     cout << "------------------" << endl << "Grid at the end: " << endl;
 
     print_matrix(size, grid);
 
-    cout << "Number of steps to end the process: " << steps << endl;
+    cout << "Number of steps to end the process: " <<  steps  << endl;
     return 0;
 }
