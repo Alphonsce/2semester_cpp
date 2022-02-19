@@ -39,10 +39,22 @@ void print_2D_vector(const std::vector<std::vector<int>>& vec)
     }
 }
 
+bool find_vector_in_2D_vector(const std::vector<int>& v, const std::vector<std::vector<int>>& vec)
+{
+    for (auto u: vec)
+    {
+        if (u == v)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
 int main()
 {
     using namespace std;
-    int size, cryst_amount, steps = 0, seed = 100;
+    int size, cryst_amount, steps = 0, seed = 105;
     // cryst_amount is a total number of crystalls
 
     srand(seed);
@@ -92,7 +104,9 @@ int main()
         }
     }
     cryst_amount = actual_amount;
-    cout << cryst_amount << endl;
+
+    print_matrix(size, grid);
+    cout << "---------------------" << endl;
 
     // starting the movement of the crystalls here
     vector<vector<int> > all_stops;
@@ -135,18 +149,44 @@ int main()
         {
             for (int j = 0; j < size; j++)
             {
-
-                continue;
-
+                vector<int> cur_pos = {i, j};
+                if (find_vector_in_2D_vector(cur_pos, all_stops))
+                {
+                    //cout << i << ' ' << j << endl;
+                    continue;
+                }
+                else if (grid[i][j] == '*')
+                {
+                    int r = gen_random(4);
+                    if (r == 0)
+                    {
+                        grid[i][j] = '0';
+                        grid[i + 1][j] = '*';
+                    }
+                    else if (r == 1)
+                    {
+                        grid[i][j] = '0';
+                        grid[i - 1][j] = '*';
+                    }
+                    else if (r == 2)
+                    {
+                        grid[i][j] = '0';
+                        grid[i][j + 1] = '*';
+                    }
+                    else
+                    {
+                        grid[i][j] = '0';
+                        grid[i][j - 1] = '*';
+                    }
+                }
             }
         }
         steps += 1;
-        print_2D_vector(all_stops);
-        break;
+        //----------print------------
+        print_matrix(size, grid);
+        cout << "---------------------" << endl;
     }    
 
-    //---------print-----------    
-    print_matrix(size, grid);
-
+    cout << "Number of steps to end the process: " << steps << endl;
     return 0;
 }
