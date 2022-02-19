@@ -9,7 +9,7 @@ int gen_random(int number)
     return rand() % number;
 }
 
-void print_matrix(int n, char** arr)
+void print_matrix(int n, std::vector<std::vector<char> > arr)
 {
     using namespace std;
     for (int i = 0; i < n; i++)
@@ -33,7 +33,7 @@ void print_vector(const std::vector<int>& vec)
 
 void print_2D_vector(const std::vector<std::vector<int>>& vec)
 {
-    for (auto v: vec)
+    for (std::vector<int> v: vec)
     {
         print_vector(v);
     }
@@ -51,7 +51,7 @@ bool find_vector_in_2D_vector(const std::vector<int>& v, const std::vector<std::
     return false;
 }
 
-bool is_already_stopped(int size, char** grid, int i, int j) {
+bool is_already_stopped(int size, std::vector<std::vector<char> > grid, int i, int j) {
     if (grid[i][j] == '*')
     {
         if ( (i == 0) || (i == size - 1) || (j == 0) || (j == size - 1) )
@@ -66,7 +66,7 @@ bool is_already_stopped(int size, char** grid, int i, int j) {
     return false;
 }
 
-std::vector<std::vector<int>> calculate_all_stops(int size, char** grid) {
+std::vector<std::vector<int>> calculate_all_stops(int size, std::vector<std::vector<char> > grid) {
     std::vector<std::vector<int>> all_stops;
     for (int i = 0; i < size; i++)
     {
@@ -102,9 +102,7 @@ int main()
         one_marker = true;
     }
 
-    char** grid = new char*[size];
-    for (int i = 0; i < size; i++)
-        grid[i] = new char[size];
+    vector<vector<char> > grid;
 
     int init_cryst_i[cryst_amount];
     int init_cryst_j[cryst_amount];
@@ -112,17 +110,19 @@ int main()
     // initializing crystalls
     for (int i = 0; i < cryst_amount; i++)
     {
-        init_cryst_i[i] = gen_random(size);
+        init_cryst_i[i] = gen_randoms(size);
         init_cryst_j[i] = gen_random(size);
     }
 
     // filling up the grid with crystalls:
     for (int i = 0; i < size; i++)
     {
+        vector<char> gridVector;
         for (int j = 0; j < size; j++)
         {
-            grid[i][j] = '0';
+            gridVector.push_back('0');
         }
+        grid.push_back(gridVector);
     }
     for (int i = 0; i < cryst_amount; i++)
     {
