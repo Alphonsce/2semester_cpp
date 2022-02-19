@@ -86,7 +86,7 @@ int main()
     int size;
     int cryst_amount;
     int steps = 0;
-    int seed = 105;
+    int seed = 105;     //105 was initial one
     bool one_marker = false;
     // cryst_amount is a total number of crystalls
 
@@ -110,7 +110,7 @@ int main()
     // initializing crystalls
     for (int i = 0; i < cryst_amount; i++)
     {
-        init_cryst_i[i] = gen_randoms(size);
+        init_cryst_i[i] = gen_random(size);
         init_cryst_j[i] = gen_random(size);
     }
 
