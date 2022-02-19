@@ -55,6 +55,7 @@ int main()
 {
     using namespace std;
     int size, cryst_amount, steps = 0, seed = 105;
+    bool one_marker = false;
     // cryst_amount is a total number of crystalls
 
     srand(seed);
@@ -64,6 +65,10 @@ int main()
     cout << "Insert amount of crystalls: ";
     cin >> cryst_amount;
     cout << endl;
+    if (cryst_amount == 1)
+    {
+        one_marker = true;
+    }
 
     char** grid = new char*[size];
     for (int i = 0; i < size; i++)
@@ -104,14 +109,27 @@ int main()
         }
     }
     cryst_amount = actual_amount;
+    if (one_marker)
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                grid[i][j] = '0';
+            }
+        }
+        grid[(size - 1) / 2][(size - 1) / 2] = '*';
+        actual_amount = 1;
+    }
 
+    cout << "Grid at the beggining: " << endl;
     print_matrix(size, grid);
-    cout << "---------------------" << endl;
+    cout << "------------------" << endl;
 
     // starting the movement of the crystalls here
     vector<vector<int> > all_stops;
 
-    while (all_stops.size() < cryst_amount)
+    while (all_stops.size() < actual_amount)
     {
         // defining positions, which we don't need to move
         all_stops.clear();
@@ -120,20 +138,20 @@ int main()
             for (int j = 0; j < size; j++)
             {
 
-                if ( (i == 0) || (i == size - 1) )
+                if ( (i == 0) || (i == size - 1) || (j == 0) || (j == size - 1) )
                 {
                     if (grid[i][j] == '*')
                     {
                         all_stops.push_back({i, j});
                     }
                 }
-                else if ( (j == 0) || (j == size - 1) )
-                {
-                    if (grid[i][j] == '*')
-                    {
-                        all_stops.push_back({i, j});
-                    }
-                }
+                // else if ( (j == 0) || (j == size - 1) )
+                // {
+                //     if (grid[i][j] == '*')
+                //     {
+                //         all_stops.push_back({i, j});
+                //     }
+                // }
                 else if ( (grid[i + 1][j] == '*') || (grid[i - 1][j] == '*') || (grid[i][j + 1] == '*') || (grid[i][j - 1] == '*') )
                 {
                     if (grid[i][j] == '*')
@@ -144,7 +162,7 @@ int main()
             }
         }    
 
-        // move all the crystals synchronized
+        // move all the crystalls at the same time
         for (int i = 0; i < size; i++)
         {
             for (int j = 0; j < size; j++)
@@ -152,10 +170,9 @@ int main()
                 vector<int> cur_pos = {i, j};
                 if (find_vector_in_2D_vector(cur_pos, all_stops))
                 {
-                    //cout << i << ' ' << j << endl;
                     continue;
                 }
-                else if (grid[i][j] == '*')
+                else if (grid[i][j] == '*' && (i != 0) && (i != size - 1) && (j != 0) && (j != size - 1) )
                 {
                     int r = gen_random(4);
                     if (r == 0)
@@ -182,10 +199,18 @@ int main()
             }
         }
         steps += 1;
+        // if (steps == 500){break;}
         //----------print------------
-        print_matrix(size, grid);
-        cout << "---------------------" << endl;
+        //print_matrix(size, grid);
+        // print_2D_vector(all_stops);
+        //cout << all_stops.size() << ' ' << cryst_amount << endl;
+        // break;
+        // cout << "---------------------" << endl;
     }    
+
+    cout << "------------------" << endl << "Grid at the end: " << endl;
+
+    print_matrix(size, grid);
 
     cout << "Number of steps to end the process: " << steps << endl;
     return 0;
