@@ -120,7 +120,7 @@ int main()
         vector<char> gridVector;
         for (int j = 0; j < size; j++)
         {
-            gridVector.push_back('0');
+            gridVector.push_back('.');
         }
         grid.push_back(gridVector);
     }
@@ -147,7 +147,7 @@ int main()
         {
             for (int j = 0; j < size; j++)
             {
-                grid[i][j] = '0';
+                grid[i][j] = '.';
             }
         }
         grid[(size - 1) / 2][(size - 1) / 2] = '*';
@@ -169,11 +169,11 @@ int main()
             for (int j = 0; j < size; j++)
             {
                 vector<int> cur_pos = {i, j};
-                if (grid[i][j] == '0' || find_vector_in_2D_vector(cur_pos, all_stops))
+                if (grid[i][j] == '.' || find_vector_in_2D_vector(cur_pos, all_stops))
                     continue;
                 else
                 {
-                    grid[i][j] = '0';
+                    grid[i][j] = '.';
                     int r = gen_random(4);
                     int new_i, new_j;
                     if (r == 0)
