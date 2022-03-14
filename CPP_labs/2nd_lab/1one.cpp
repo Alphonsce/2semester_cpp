@@ -27,6 +27,7 @@ int main() {
     std::cin >> a.f;    // записали число в память как float
     std::cout << a.u << std::endl;      // считали из той же ячейки памяти как unsigned
     std::string as_binary = unsigned_to_binary(a.u);
+    // ouput:
     std::cout << as_binary[0] << ' ';
     for (int i = 1; i < 9; i ++) {
         std::cout << as_binary[i];
