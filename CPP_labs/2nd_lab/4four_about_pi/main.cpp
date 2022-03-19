@@ -86,27 +86,38 @@ double ramanujan_pi(float tol, long unsigned iterations) {
     return ramanujans_const / (one_over_pi);
 }
 
-float pi_from_arctans(
-    std::vector<float> arctan_arguments,    // аргументы арктенгенсов
-    std::vector<float> arctan_coefs,        // коэффициенты при арктангенсах
-    float tol, long long unsigned max_iter)
-{
-    float pi_div4 = 0;
-    long long unsigned_iteratons_for_arctans = 10;
-    std::vector<float> arctan_values;
-    std::vector<float> errors;
+long double pi_from_arctans(
+    std::vector<long double> arctan_arguments,    // аргументы арктенгенсов
+    std::vector<long double> arctan_coefs,        // коэффициенты при арктангенсах
+    long double tol, long long unsigned max_iter) {
 
-    for (int i = 0; i < arctan_values.size(); i ++) {
-        pi_div4 += arctan_values[i] * arctan_coefs[i];
+    long double pi_div4 = 0;
+    long long unsigned_iteratons_for_arctans = 10;
+    std::vector<long double> arctan_values(arctan_arguments.size(), 0.);
+
+    // checking values for different iterations and looking at tolerance:
+    for (unsigned iterations = 2; iterations < max_iter; iterations ++) {
+        pi_div4 = 0;
+        for (unsigned pos_in_vec = 0; pos_in_vec < arctan_arguments.size(); pos_in_vec ++) {
+            arctan_values[pos_in_vec] = arctan(arctan_arguments[pos_in_vec], iterations);
+            pi_div4 += arctan_values[pos_in_vec] * arctan_coefs[pos_in_vec];
+        }
+        if (std::abs(4. * pi_div4 - PI) < tol)
+            break;
     }
+    print_vector(arctan_values);
     return 4. * pi_div4;
 }
 
 int main() {
     std::cout << std::fixed;
-    std::cout.precision(20);
+    std::cout.precision(25);
 
-    std::cout << 4. * arctan(1., 50000) << std::endl;
+    std::cout << pi_from_arctans(
+        {1. / 57, 1. / 239, 1. / 682, 1. / 12943},
+        {44., 7., -12., 24.},
+        0.,
+        5000) << std::endl;
 
     return 0;
 }

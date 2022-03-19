@@ -11,4 +11,12 @@ long long unsigned power(long long unsigned n, unsigned p);
 
 long double arctan(long double x, long long unsigned iterations);
 
+void print_vector(std::vector<long double> vec);
+
+void print_vector(std::vector<double> vec);
+
+void print_vector(std::vector<float> vec);
+
+void print_vector(std::vector<int> vec);
+
 #endif

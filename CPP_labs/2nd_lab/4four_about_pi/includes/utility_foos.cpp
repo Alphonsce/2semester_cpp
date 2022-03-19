@@ -1,6 +1,7 @@
 #include <cmath>
 #include <math.h>
 #include <iostream>
+#include <vector>
 
 #include "utility_foos.hpp"
 
@@ -38,15 +39,42 @@ long long unsigned power(long long unsigned n, unsigned p) {
     return result;
 }
 
+// Функция не работает!
 long double arctan(long double x, long long unsigned iterations) {
     long double positives = 0;
     long double negatives = 0;
-    long double arctan_x;
-    for (long long unsigned k = 0; k < iterations; k ++) {
+    long double arctan_x = 0;
+    long long unsigned number;
+    for (long long unsigned k = 1; k <= iterations; k += 1) {
+        number = 2  * k - 1;
         if (k % 2 != 0)
-            positives += pow(x, k) / (2  * k - 1);
+            arctan_x += pow(x, number) * (1. / number);
         else
-            negatives += pow(x, k) / (2  * k - 1);
+            arctan_x -= pow(x, number) * (1. / number);
     }
-    return positives - negatives;
+    return arctan_x;
+}
+
+void print_vector(std::vector<long double> vec) {
+    for (int i = 0; i < vec.size(); i ++)
+        std::cout << vec[i] << ' ';
+    std::cout << std::endl;
+}
+
+void print_vector(std::vector<double> vec) {
+    for (int i = 0; i < vec.size(); i ++)
+        std::cout << vec[i] << ' ';
+    std::cout << std::endl;
+}
+
+void print_vector(std::vector<float> vec) {
+    for (int i = 0; i < vec.size(); i ++)
+        std::cout << vec[i] << ' ';
+    std::cout << std::endl;
+}
+
+void print_vector(std::vector<int> vec) {
+    for (int i = 0; i < vec.size(); i ++)
+        std::cout << vec[i] << ' ';
+    std::cout << std::endl;
 }
