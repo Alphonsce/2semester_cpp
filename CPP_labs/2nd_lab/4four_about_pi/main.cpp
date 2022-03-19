@@ -2,36 +2,12 @@
 #include <string>
 #include <cstdlib>
 #include <cmath>
+#include <vector>
 
-const double PI = 3.141592653589793;
+#include "./includes/utility_foos.hpp"
+#include "./includes/constants.hpp"
 
-const double one_over_sqrt_two = 0.707106781186547524401;
-const double ramanujans_const = 0.0002885855652225477091;
-
-// Реализация факториала с хвостовой рекурсией:
-unsigned fact(unsigned n) {
-    unsigned fac_n = 1;
-    if (n == 0 || n == 1)
-        return 1;
-    for (int i = 1; i <= n; i ++) {
-        fac_n *= i;
-    }
-    return fac_n;
-}
-
-unsigned power(unsigned n, unsigned p) {
-    unsigned result = 1;
-    for (int i = 0; i < p; i ++) {
-        result *= n;
-    }
-    return result;
-}
-
-short int minus_one_to_n(long long int n) {
-    if (n % 2 == 0)
-        return 1;
-    return -1;
-}
+//-----------Calculation functions below-------------------
 
 float leibnitz_pi(float precision, long unsigned max_iter) {
     // наилучший результат: 3.141592
@@ -68,7 +44,7 @@ float euler_pi(float precision, long unsigned max_iter) {
     return pi;
 }
 
-double gauss_legendre(float tol, unsigned iterations) {
+double gauss_legendre_pi(float tol, long unsigned iterations) {
     // лучшее значение: 3.14159265358979
     double a_next, b_next, t_next, p_next;
     double a = 1;
@@ -94,31 +70,43 @@ double gauss_legendre(float tol, unsigned iterations) {
     return pi;
 }
 
-double ramanujan_pi(float tol, unsigned iterations) {
+double ramanujan_pi(float tol, long unsigned iterations) {
     double one_over_pi = 0;
     double numerator, delimeter;
     unsigned k = 0;
     do {
         unsigned fac_k = fact(k);
         numerator = fact(4 * k) * (1103 + 26390 * k);
-        delimeter = power(fac_k, 4) * power(396, 4 * k);
+        delimeter = pow(fac_k, 4) * pow(396, 4 * k);
         one_over_pi += numerator / delimeter;
-        std::cout << numerator << std::endl; 
-        std::cout << delimeter << std::endl;
-        std::cout << "--------------------" << std::endl;  
         if (k >= iterations)
             break;
         k ++;
-    } while(std::abs(1. / one_over_pi - PI) > tol);
-    return 1. / (one_over_pi * ramanujans_const);
+    } while(std::abs(ramanujans_const / one_over_pi - PI) > tol);
+    return ramanujans_const / (one_over_pi);
+}
+
+float pi_from_arctans(
+    std::vector<float> arctan_arguments,    // аргументы арктенгенсов
+    std::vector<float> arctan_coefs,        // коэффициенты при арктангенсах
+    float tol, long long unsigned max_iter)
+{
+    float pi_div4 = 0;
+    long long unsigned_iteratons_for_arctans = 10;
+    std::vector<float> arctan_values;
+    std::vector<float> errors;
+
+    for (int i = 0; i < arctan_values.size(); i ++) {
+        pi_div4 += arctan_values[i] * arctan_coefs[i];
+    }
+    return 4. * pi_div4;
 }
 
 int main() {
     std::cout << std::fixed;
     std::cout.precision(20);
 
-    // std::cout << gauss_legendre(0, 5) << std::endl;
-    std::cout << ramanujan_pi(0, 4) << std::endl; 
+    std::cout << 4. * arctan(1., 50000) << std::endl;
 
     return 0;
 }
