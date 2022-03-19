@@ -15,11 +15,6 @@ float leibnitz_pi(float precision, long unsigned max_iter, std::string output_pa
     long unsigned sum_step = 0;
     long unsigned delimeter = 1;
 
-    std::ofstream myfile;
-    myfile.open(output_path);
-    myfile << "iter, pi\n";
-    myfile.precision(20);
-
     while (std::abs(4 * pi_4 - PI) > precision) {
         pi_4 += minus_one_to_n(sum_step) * (1. / delimeter);
         delimeter += 2;
@@ -40,13 +35,15 @@ float euler_pi(float precision, long unsigned max_iter, std::string output_path)
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter, pi\n";
+    myfile << "iter,pi\n";
     myfile.precision(20);
 
     while (std::abs( sqrt(6 * pi_sq_6) - PI) > precision) {
         pi_sq_6 += 1. / (unsquared_delimeter * unsquared_delimeter);
         unsquared_delimeter += 1;
         step += 1;
+
+        myfile << step + 1 << ',' <<  sqrt(6 * pi_sq_6) << std::endl;
         if (step >= max_iter) {
             break;
         }
@@ -68,7 +65,7 @@ double gauss_legendre_pi(float tol, long unsigned iterations, std::string output
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter, pi\n";
+    myfile << "iter,pi\n";
     myfile.precision(20);
 
     do {
@@ -77,6 +74,8 @@ double gauss_legendre_pi(float tol, long unsigned iterations, std::string output
         t_next = t - p * (a_next - a) * (a_next - a);
         p = (p << 1);
         pi = (a_next + b_next) * (a_next + b_next) / (4 * t_next);
+
+        myfile << i + 1 << ',' << pi << std::endl;
         if (i >= iterations)
             break;
         a = a_next;
@@ -94,7 +93,7 @@ double ramanujan_pi(float tol, long unsigned iterations, std::string output_path
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter, pi\n";
+    myfile << "iter,pi\n";
     myfile.precision(20);
 
     do {
@@ -102,6 +101,8 @@ double ramanujan_pi(float tol, long unsigned iterations, std::string output_path
         numerator = fact(4 * k) * (1103 + 26390 * k);
         delimeter = pow(fac_k, 4) * pow(396, 4 * k);
         one_over_pi += numerator / delimeter;
+
+        myfile << k + 1 << ',' <<  ramanujans_const / (one_over_pi) << std::endl;
         if (k >= iterations)
             break;
         k ++;
@@ -120,7 +121,7 @@ long double pi_from_arctans(
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter, pi\n";
+    myfile << "iter,pi\n";
     myfile.precision(20);
 
     // checking values for different iterations and looking at tolerance:
