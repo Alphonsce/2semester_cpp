@@ -17,4 +17,6 @@ long double pi_from_arctans(
     std::vector<long double> arctan_coefs,        // коэффициенты при арктангенсах
     long double tol, long long unsigned max_iter, std::string output_path);
 
+double viete_pi(float tol, long unsigned iterations, std::string output_path);
+
 #endif

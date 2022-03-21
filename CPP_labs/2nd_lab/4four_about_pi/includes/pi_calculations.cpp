@@ -15,16 +15,21 @@ float leibnitz_pi(float precision, long unsigned max_iter, std::string output_pa
     long unsigned sum_step = 0;
     long unsigned delimeter = 1;
 
+    std::ofstream myfile;
+    myfile.open(output_path);
+    myfile << "iter,pi,tol\n";
+    myfile.precision(20);
+
     while (std::abs(4 * pi_4 - PI) > precision) {
         pi_4 += minus_one_to_n(sum_step) * (1. / delimeter);
         delimeter += 2;
         sum_step += 1;
-        std::cout << pi_4 << std::endl;
+         myfile << sum_step + 1 << ',' <<  4. * pi_4 << ',' << precision << std::endl;
         if (sum_step >= max_iter) {
             break;
         }
     }  
-    return pi_4 * 4;
+    return pi_4 * 4.;
 }
 
 float euler_pi(float precision, long unsigned max_iter, std::string output_path) {
@@ -35,7 +40,7 @@ float euler_pi(float precision, long unsigned max_iter, std::string output_path)
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter,pi\n";
+    myfile << "iter,pi,tol\n";
     myfile.precision(20);
 
     while (std::abs( sqrt(6 * pi_sq_6) - PI) > precision) {
@@ -43,7 +48,7 @@ float euler_pi(float precision, long unsigned max_iter, std::string output_path)
         unsquared_delimeter += 1;
         step += 1;
 
-        myfile << step + 1 << ',' <<  sqrt(6 * pi_sq_6) << std::endl;
+        myfile << step + 1 << ',' <<  sqrt(6 * pi_sq_6) << ',' << precision << std::endl;
         if (step >= max_iter) {
             break;
         }
@@ -65,7 +70,7 @@ double gauss_legendre_pi(float tol, long unsigned iterations, std::string output
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter,pi\n";
+    myfile << "iter,pi,tol\n";
     myfile.precision(20);
 
     do {
@@ -75,7 +80,7 @@ double gauss_legendre_pi(float tol, long unsigned iterations, std::string output
         p = (p << 1);
         pi = (a_next + b_next) * (a_next + b_next) / (4 * t_next);
 
-        myfile << i + 1 << ',' << pi << std::endl;
+        myfile << i + 1 << ',' << pi << ',' << tol << std::endl;
         if (i >= iterations)
             break;
         a = a_next;
@@ -93,16 +98,18 @@ double ramanujan_pi(float tol, long unsigned iterations, std::string output_path
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter,pi\n";
+    myfile << "iter,pi,tol\n";
     myfile.precision(20);
 
     do {
         unsigned fac_k = fact(k);
-        numerator = fact(4 * k) * (1103 + 26390 * k);
-        delimeter = pow(fac_k, 4) * pow(396, 4 * k);
+        if (k <= 30) {
+            numerator = fact(4 * k) * (1103 + 26390 * k);
+            delimeter = pow(fac_k, 4) * pow(396, 4 * k);
+        }
         one_over_pi += numerator / delimeter;
 
-        myfile << k + 1 << ',' <<  ramanujans_const / (one_over_pi) << std::endl;
+        myfile << k + 1 << ',' <<  ramanujans_const / (one_over_pi) << ',' << tol << std::endl;
         if (k >= iterations)
             break;
         k ++;
@@ -121,8 +128,9 @@ long double pi_from_arctans(
 
     std::ofstream myfile;
     myfile.open(output_path);
-    myfile << "iter,pi\n";
+    myfile << "iter,pi,tol\n";
     myfile.precision(20);
+
 
     // checking values for different iterations and looking at tolerance:
     for (unsigned iterations = 2; iterations < max_iter; iterations ++) {
@@ -131,11 +139,33 @@ long double pi_from_arctans(
             arctan_values[pos_in_vec] = arctan(arctan_arguments[pos_in_vec], iterations);
             pi_div4 += arctan_values[pos_in_vec] * arctan_coefs[pos_in_vec];
         }
-        myfile << iterations << ',' << pi_div4 * 4. << std::endl;
+        myfile << iterations << ',' << pi_div4 * 4. << ',' << tol << std::endl;
         if (std::abs(4. * pi_div4 - PI) < tol)
             break;
     }
     myfile.close();
     // print_vector(arctan_values);
     return 4. * pi_div4;
+}
+
+double viete_pi(float tol, long unsigned iterations, std::string output_path) {
+    double a_n = sqrt(2);
+    double two_over_pi = 1.;
+    double pi = 1.;
+
+    std::ofstream myfile;
+    myfile.open(output_path);
+    myfile << "iter,pi,tol\n";
+    myfile.precision(20);
+
+    for (int i = 0; i < iterations; i++) {
+        two_over_pi *= a_n / 2.;
+        a_n = sqrt(2 + a_n);
+        pi = 2. / two_over_pi;
+
+        myfile << i + 1 << ',' <<  pi << ',' << tol << std::endl;
+        if (std::abs(pi-PI) < tol)
+            break;
+    }
+    return pi;
 }

@@ -39,7 +39,7 @@ long long unsigned power(long long unsigned n, unsigned p) {
     return result;
 }
 
-// Функция не работает!
+// Итеративный метод вычисления арктангенса
 long double arctan(long double x, long long unsigned iterations) {
     long double positives = 0;
     long double negatives = 0;
