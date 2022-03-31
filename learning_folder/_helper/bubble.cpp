@@ -1,5 +1,12 @@
 #include <iostream>
 
+//int* arr is the same as arr[]
+void print_array(int* arr, int size) {
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << ' ';
+    }
+    std::cout << std::endl;
+}
 
 void swap(int &a, int &b)
 {
@@ -25,18 +32,15 @@ void BubbleSort(int n, int* arr)
         if (!swapped)
             break;
     }
-
-    for (int i = 0; i < n; i++)
-    {
-        std::cout << *(arr + i) << ' ';
-    }
-    std::cout << std::endl;
+    print_array(arr, n);
 }
 
 int main()
-{
-    int arr[]= {3, 2, 1, 235, 4353, 13451, 1451, 3451, 14351, 145, -5, 1235, 123412, 123412, 1234, 134124,346, 6756, 67, 675, 67, 78657, 85, 7867, 85678, 5678, 5678, 5678, 5678, 5678, 56, 7856, 78567, 8};
-    BubbleSort(sizeof(arr) / sizeof(arr[0]), arr);
+{   
+    int size = 5;
+    int* arr = new int[5]{3, 2, 1};
+    print_array(arr, size);
+    BubbleSort(size, arr);
 
     return 0;
 }
