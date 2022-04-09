@@ -1,5 +1,7 @@
 #include <iostream>
 
+// https://www.geeksforgeeks.org/doubly-linked-list/
+
 struct node {
 
     int data;
@@ -12,11 +14,8 @@ struct node {
 void append(node** head_ref, int new_data)
 {
     node* new_node = new node;
- 
     node* last = *head_ref;
- 
     new_node->data = new_data;
- 
     new_node->next = NULL;
  
     if (*head_ref == NULL)
@@ -30,7 +29,6 @@ void append(node** head_ref, int new_data)
         last = last->next;
 
     last->next = new_node;
- 
     new_node->prev = last;
  
     return;
@@ -50,7 +48,8 @@ void push(node** head_ref, int new_data)
     if ((*head_ref) != NULL)
         (*head_ref)->prev = new_node;
  
-    (*head_ref) = new_node;
+    (*head_ref) = new_node;     // уже в памяти все как надо расставили, а здесь просто переприсвоили другое значение 
+                                // для переменной, держащей указатель на head
 }
 
 void printList(node* tmp)
@@ -95,7 +94,8 @@ int main() {
  
     printList(head);
 
-
-
     return 0;
 }
+
+// Можно по всякому улучшать эту конструкцию, например: хранить указатель на tail, а также можно
+// реализовать это классом и прсото подсчитывать какое количество раз мы выполнили push или pull и таким образом будет знать длину списка
