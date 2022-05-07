@@ -34,7 +34,7 @@ void print_array(std::string* arr) {
 void print_total_length(std::vector<int> coords, int n) {
     std::sort(coords.begin(), coords.end());
     print_array(coords);
-    std::vector<int> s;
+    std::vector<int> s; // для мемоизации
     if (n == 2) {
        std::cout << coords[1] - coords[0];
        return;
