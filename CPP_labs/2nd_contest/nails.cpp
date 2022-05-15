@@ -41,10 +41,11 @@ void print_total_length(std::vector<int> coords, int n) {
     }
 
     s.push_back(coords[1] - coords[0]); // первый всегда просто со вторым соединяем
-    s.push_back(coords[2] - coords[0]);
-    for (int i = 2; i < coords.size() - 1; ++ i)
+    s.push_back(coords[2] - coords[0]); // из трех всегда одинаоково оптимальное соединение строится - просто последовательно
+    for (int i = 2; i < coords.size() - 1; ++ i) {
         s.push_back(std::min(s[i - 1], s[i - 2]) + abs(coords[i] - coords[i + 1]));
-
+        std::cout << s[i - 1] << ' ' << s[i - 2] + abs(coords[i] - coords[i + 1]) << ' ' << std::min(s[i - 1], s[i - 2]) + abs(coords[i] - coords[i + 1]) << std::endl;
+    }
     print_array(s);
 
     std::cout << s[s.size() - 1] << std::endl;
