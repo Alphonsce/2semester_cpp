@@ -32,6 +32,9 @@ void add_element(Table& hash_table, int value) {
     bool found = false;
     unsigned int idx = hash(value) % hash_table.size;
     std::list<int> l = hash_table.table[idx];
+    for (std::list<int>::iterator i = l.begin(); i != l.end(); ++i) {
+        if (*i == value) found = true;
+    }
 
     if (!found)
         hash_table.table[idx].push_back(value);
@@ -64,6 +67,7 @@ int main() {
     std::cout << "-------------" << std::endl;
 
     add_element(hash_table, 5);
+    add_element(hash_table, 6);
     add_element(hash_table, 6);
     print_table(hash_table);
 
